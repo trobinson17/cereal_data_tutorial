@@ -15,7 +15,7 @@ hist(df_cereal_25$calories)
 hist(df_cereal_25$rating)
 
 #Next, I will conduct two kinds of mean differences analysis (ANOVA and t-test)
-#First a t-test- differences between calories by type (hot or cold)
+#First a t-test- calloric differences between type (hot or cold)
 calories_type <- t.test(calories ~ type, df_cereal_25)
 t.test(calories ~ type, df_cereal_25)
 #On avg., cold sereals have ~7 more calories per serving
