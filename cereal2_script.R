@@ -1,44 +1,71 @@
 #IVS are first; plots for type and mfr
 #first is type
-freq_type <- table(df_cereal_25$type)
-barplot(freq_type)
+Type <- table(df_cereal_25$type)
+barplot(Type)
 
 #Next is our mfr
-freq_mfr <- table(df_cereal_25$mfr)
-barplot(freq_mfr)
+Manufacturer <- table(df_cereal_25$mfr)
+barplot(Manufacturer)
 
-#Now let's select two DVs we are interested in: calories and rating
-#I should first make some histograms
+#DVs are second: plots for calories and rating
 #Calories first
-hist(df_cereal_25$calories)
+Calories <- df_cereal_25$calories
+hist(Calories)
 #Ratings second
-hist(df_cereal_25$rating)
+Ratings <- df_cereal_25$rating
+hist(Ratings)
 
-#Next, I will conduct two kinds of mean differences analysis (ANOVA and t-test)
+#Next, tests for mean differences (ANOVA[mfr] and t-test[type])
 #First a t-test- calloric differences between type (hot or cold)
-calories_type <- t.test(calories ~ type, df_cereal_25)
 t.test(calories ~ type, df_cereal_25)
 #On avg., cold sereals have ~7 more calories per serving
 
 
-#Move onto ANOVA (several levels of our IV, mfr)
-ANOVA_mfr_cal <- aov(calories ~ mfr, df_cereal_25)
-aov(calories ~ mfr, df_cereal_25)
-summary(ANOVA_mfr_cal)
-TukeyHSD(ANOVA_mfr_cal)
+#Move onto ANOVA (3+ levels of our IV, mfr)
+summary(aov(calories ~ mfr, df_cereal_25))
+TukeyHSD(aov(calories ~ mfr, df_cereal_25))
 
-#Zone in on sig. difference from TukeyHSD
+#Zone in on marginally sig. difference from TukeyHSD
 mean(df_cereal_25$calories[df_cereal_25$mfr == "N"])
 mean(df_cereal_25$calories[df_cereal_25$mfr == "G"])
 
 #Next a t-test for rating
-ratings_type <- t.test(rating ~ type, df_cereal_25)
 t.test(rating ~ type, df_cereal_25)
+library(ggplot2)
+Graph2_base <- ggplot(df_cereal_25, aes(y = rating,
+                                   x = type))
+Graph2_final <- Graph2+
+  stat_summary(fun.y = mean,
+                geom = "bar",
+                color = "black",
+                fill = "gray")+
+  stat_summary(fun.data = mean_se,
+               geom = "errorbar",
+               width = .15)+
+  ylim(0,70)+
+  geom_segment(x = 1, y = 65, xend = 2, yend = 65)+
+  geom_text(x = 1.5, y = 65, label = "*", size = 12)+
+  theme_classic()+
+  labs(x = "Type of Cereal", y = "Consumer Rating")
 #It seems hot cereals were rated more favorably than cold cereals by a factor
 #of about 1.35
 
 #Means were provided, view in console 
 summary(aov(rating ~ mfr, df_cereal_25))
+library(ggplot2)
+Graph3_base <- ggplot(df_cereal_25, aes(y = rating,
+                                   x = mfr))
+Graph3_final <- Graph3+
+  stat_summary(fun.y = mean,
+               geom = "bar",
+               color = "black",
+               fill = "gray")+
+  stat_summary(fun.data = mean_se,
+               geom = "errorbar",
+               width = .15)+
+  ylim(0,100)+
+  theme_classic()+
+  labs(x = "Manufacturer Initial", y = "Consumer Rating")
 TukeyHSD(aov(rating ~ mfr, df_cereal_25))
 
 #Zoom in on sig. difference from TukeyHSD
