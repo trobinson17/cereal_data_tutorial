@@ -34,8 +34,8 @@ t.test(rating ~ type, df_cereal_25)
 library(ggplot2)
 Graph2_base <- ggplot(df_cereal_25, aes(y = rating,
                                    x = type))
-Graph2_final <- Graph2+
-  stat_summary(fun.y = mean,
+Graph2_final <- Graph2_base+
+  stat_summary(fun = mean,
                 geom = "bar",
                 color = "black",
                 fill = "gray")+
@@ -55,8 +55,8 @@ summary(aov(rating ~ mfr, df_cereal_25))
 library(ggplot2)
 Graph3_base <- ggplot(df_cereal_25, aes(y = rating,
                                    x = mfr))
-Graph3_final <- Graph3+
-  stat_summary(fun.y = mean,
+Graph3_final <- Graph3_base+
+  stat_summary(fun = mean,
                geom = "bar",
                color = "black",
                fill = "gray")+
